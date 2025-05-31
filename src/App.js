@@ -196,20 +196,10 @@ function App() {
       }
   }, []);
 
-  // Function to delete a todo (simulated locally)
   const deleteTodo = useCallback(async () => {
       setLoading(true);
       try {
-          // Simulate API call for deleting (DummyJSON doesn't actually delete)
           console.log("Simulating API call to delete todo ID:", deletingTodoId);
-          // In a real app, you'd make a DELETE request here:
-          /*
-          const response = await fetch(`https://dummyjson.com/todos/${deletingTodoId}`, {
-              method: 'DELETE'
-          });
-          if (!response.ok) throw new Error('Failed to delete todo on DummyJSON');
-          */
-
           setTodos(prevTodos => prevTodos.filter(todo => todo.id !== deletingTodoId));
           setShowDeleteModal(false);
           setDeletingTodoId(null);
@@ -221,7 +211,6 @@ function App() {
       }
   }, [deletingTodoId]);
 
-  // Filter todos by status for each lane
   const pendingTodos = useMemo(() => todos.filter(todo => todo.status === 'pending'), [todos]);
   const inProgressTodos = useMemo(() => todos.filter(todo => todo.status === 'in-progress'), [todos]);
   const completedTodos = useMemo(() => todos.filter(todo => todo.status === 'completed'), [todos]);
@@ -245,11 +234,8 @@ function App() {
   return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 font-inter">
           <header className="text-center mb-8">
-              <h1 className="text-4xl font-extrabold text-gray-800 mb-2">Trello-style Todo Board</h1>
+              <h1 className="text-4xl font-extrabold text-gray-800 mb-2"> Todo Board</h1>
               <p className="text-gray-600">Drag and drop tasks between lanes to manage your workflow.</p>
-              <p className="text-sm text-gray-500 mt-2">
-                  (Using DummyJSON API - changes are local to this session)
-              </p>
           </header>
 
           <div className="flex justify-center mb-6">
