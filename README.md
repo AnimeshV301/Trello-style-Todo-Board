@@ -7,86 +7,51 @@ Lane Component: Represents a single column (e.g., "Pending", "In Progress", "Com
 TodoCard Component: Displays an individual task. It's draggable and contains actions like "Edit" and "Delete".
 Modal Components (AddTodoModal, EditTodoModal, DeleteConfirmationModal): Separate components for user interactions that require overlays, ensuring a clean separation of concerns and reusable UI.
 
-4. State Management
-useState
-For managing todos, modal visibility, and currently edited todo.
+State Management:
+React's built-in useState hook is used for managing component-specific states (e.g., todos array, modal visibility, current editing todo).
+useRef is used for draggedTodoId and nextTodoId to maintain mutable values across renders without triggering re-renders, which is suitable for drag-and-drop state and simple ID generation.
 
-useRef
-For draggedTodoId and nextTodoId to maintain mutable values without triggering re-renders.
+Styling:
+Tailwind CSS: A utility-first CSS framework is used for all styling. This allows for rapid UI development directly within the JSX, promoting consistency and responsiveness without writing custom CSS files.
 
-5. Styling
-Tailwind CSS is used throughout for utility-first styling.
-This promotes:
+Drag and Drop Implementation:
+Due to environment constraints, a custom HTML5 Drag and Drop API implementation is used instead of external libraries.
+draggable="true" attribute on TodoCard makes it draggable.
+onDragStart on TodoCard sets the dataTransfer object with the todo's ID.
+onDragOver on Lane prevents the default browser behavior (which disallows dropping) and sets the dropEffect.
+onDrop on Lane retrieves the dragged todo's ID and updates the todos state to reflect the new status.
+Visual feedback (lane background change) is implemented using onDragEnter and onDragLeave to enhance user experience.
 
-Rapid UI development
+Performance Optimizations
+Several React features and patterns have been applied to optimize performance:
+React.memo: The Lane and TodoCard components are wrapped with React.memo. This higher-order component prevents re-rendering of these components if their props haven't changed, significantly reducing unnecessary renders, especially when only a small part of the todos array is updated.
+useCallback: Functions like handleDragStart, handleDrop, addTodo, updateTodo, and deleteTodo are memoized using useCallback. This ensures that these functions are not re-created on every render of the App component, preventing unnecessary re-renders of child components that depend on them.
+useMemo: The pendingTodos, inProgressTodos, and completedTodos arrays are memoized using useMemo. This ensures that these filtered lists are only re-calculated when the todos array itself changes, avoiding expensive re-filtering on every render.
+Local State for Modals: State variables controlling modal visibility (showAddModal, showEditModal, showDeleteModal) are managed directly in the App component. This prevents the entire application from re-rendering just because a modal is opened or closed.
 
-Consistency in design
+Known Limitations
+No Data Persistence: As per the requirement to use the DummyJSON API, this application does not persist data. Any tasks added, edited, or moved will be lost when the browser tab is closed or refreshed. The DummyJSON API is primarily for fetching static data and does not support actual write operations for user data.
+Basic Drag and Drop UX: The custom HTML5 Drag and Drop implementation is functional but lacks advanced features found in dedicated libraries (e.g., visual placeholders for dragged items, smooth animations during drag, reordering within the same lane).
+Limited API Functionality: The DummyJSON API is used only for initial data fetching. All CRUD operations (create, update, delete) are simulated locally within the browser's memory.
 
-Mobile responsiveness without custom CSS
+Additional Enhancements
+If given more time, the following enhancements would significantly improve the application:
+Real Backend Integration:
+Implement a proper backend (e.g., Node.js with Express, Python with Flask/Django, or a serverless solution like Firebase Firestore, Supabase, AWS Amplify) to enable persistent storage of tasks. This would allow users to save their boards and access them across sessions.
+Enhanced Drag and Drop Library:
+Integrate a more robust drag-and-drop library like react-beautiful-dnd (if environment permits) or dnd-kit to provide a smoother user experience, including visual cues, reordering within lanes, and better accessibility.
 
-6. Drag and Drop Implementation
-Custom HTML5 Drag-and-Drop API used due to environment constraints.
-
-Logic Flow:
-draggable="true" set on TodoCard
-
-onDragStart: stores todoId in dataTransfer
-
-onDragOver: calls preventDefault() and sets dropEffect
-
-onDrop: updates todo status in local state
-
-onDragEnter/onDragLeave: provide visual feedback for the drop area
-
-7. Performance Optimizations
-React.memo
-Prevents unnecessary re-renders of Lane and TodoCard components.
-
-useCallback
-Memoizes handler functions: addTodo, updateTodo, deleteTodo, handleDragStart, handleDrop.
-
-useMemo
-Efficiently computes pendingTodos, inProgressTodos, completedTodos only when todos changes.
-
-Scoped Modal State
-Modal visibility (showAddModal, etc.) is kept local to avoid unnecessary global renders.
-
-8. Known Limitations
-Limitation	Description
-No Data Persistence	Uses DummyJSON API only for fetch; all CRUD is local and lost on refresh.
-Basic DnD UX	Custom DnD lacks advanced features like animations or reordering.
-Limited API Features	DummyJSON is read-only for todos.
-
-9. Suggested Enhancements
-If given more time, the following features could improve the app:
-
-Backend Integration
-Add a real database (Firebase, Supabase, Express + MongoDB/PostgreSQL) for persistent storage.
-
-Enhanced Drag and Drop
-Use libraries like react-beautiful-dnd or dnd-kit for:
-
-Reordering tasks
-
-Animations
-
-Better accessibility
-
-User Authentication
-Allow personal boards per user via Firebase Auth, Auth0, or similar.
-
-Lane Management
-Enable users to add, remove, or rename lanes dynamically.
-
-Task Details View
-Support sub-tasks, labels, due dates, or comments in a detailed modal view.
-
-Filtering, Sorting, and Search
-Implement search input and filter options (by title, status, priority, etc.)
-
-Responsive Design
-Further enhance UI for tablets and small screens.
-
-Testing
-Add unit tests with Jest and React Testing Library for major components and logic.
-
+User Authentication:
+Add user authentication (e.g., Firebase Authentication, Auth0) to allow multiple users to have their own personalized todo boards.
+More Dynamic Lane Management:
+Allow users to dynamically add, remove, and rename lanes.
+Task Details View:
+Implement a more detailed view for each task, potentially allowing for sub-tasks, due dates, labels, or comments.
+Filtering and Sorting:
+Add options to filter tasks by title, description, or status, and sort them by creation date, due date, or priority.
+Search Functionality:
+Enable searching for tasks by keywords.
+Responsive Design Refinements:
+Further optimize the layout and interactions for a seamless experience across a wider range of devices and screen sizes.
+Unit and Integration Tests:
+Write comprehensive tests for components and application logic to ensure stability and prevent regressions.
