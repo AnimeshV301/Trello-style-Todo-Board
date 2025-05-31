@@ -1,16 +1,14 @@
 import React from "react";
 const TodoCard = React.memo(({ todo, setEditingTodo, setShowEditModal, setDeletingTodoId, setShowDeleteModal, onDragStartTodo }) => {
-    console.log(todo);
-    
     return (
         <div
-            draggable="true" // Make the card draggable
-            onDragStart={(e) => onDragStartTodo(e, todo.id)} // Handle drag start
+            draggable="true" 
+            onDragStart={(e) => onDragStartTodo(e, todo.id)} 
             className={`
                 bg-gray-50 p-4 mb-3 rounded-md shadow-md border border-gray-200
                 transition-all duration-150 ease-in-out
                 hover:shadow-lg hover:border-blue-300 cursor-grab
-                class="border-t-4 border-indigo-500 
+              border border-indigo-600 
             `}
         >
             <h3 className="font-semibold text-gray-800 text-lg mb-1">{todo.title}</h3>
@@ -27,7 +25,7 @@ const TodoCard = React.memo(({ todo, setEditingTodo, setShowEditModal, setDeleti
                 </button>
                 <button
                     onClick={() => {
-                        setDeletingTodoId(todo.firestoreId);
+                        setDeletingTodoId(todo.id); 
                         setShowDeleteModal(true);
                     }}
                     className="text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded-md hover:bg-red-50 transition-colors"
