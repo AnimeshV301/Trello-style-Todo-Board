@@ -1,7 +1,7 @@
 {
   "name": "kanban-todo-board",
   "version": "0.1.0",
-  "homepage": "https://animeshv301.github.io/Trello-style-Todo-Board",
+  "homepage": "https://animeshv301.github.io/Trello-style-Todo-Board/",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
